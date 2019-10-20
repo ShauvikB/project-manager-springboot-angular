@@ -1,0 +1,103 @@
+<div class="container">
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <form (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">First Name</span>
+          </div>
+          <input #firstName="ngModel" [(ngModel)]="user.firstName" class="form-control" name="firstName" type="text"
+                 [ngClass]="{ 'is-invalid': f.submitted && firstName.invalid }"
+                 required/>
+        </div>
+        <br>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Last Name</span>
+          </div>
+          <input #lastName="ngModel" [(ngModel)]="user.lastName" class="form-control" name="lastName" type="text"
+                 [ngClass]="{ 'is-invalid': f.submitted && lastName.invalid }"
+                 required/>
+        </div>
+        <br>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Employee Id</span>
+          </div>
+          <input #empId="ngModel" [(ngModel)]="user.empId" class="form-control" name="empId" type="text"
+                 [ngClass]="{ 'is-invalid': f.submitted && empId.invalid }"  />
+        </div>
+        <br>
+        <button class="btn btn-primary" type="submit" role="button" >{{btnTitle}}</button>&nbsp;&nbsp;
+        <a class="btn btn-primary" (click)="reset()" role="button">Reset</a>
+      </form>
+    </div>
+    <div class="col"></div>
+  </div>
+  <hr class="style11">
+
+  <div class="card">
+   
+    <div class="card-body">
+    <!-- Filter Section-->
+    <div >
+      <div class="row">
+        <div >
+          <table>
+            <tr>
+              <td>
+                  <input type="text" size="40" [(ngModel)]="filterStr" name="filterStr" class="form-control" id="filterStr" placeholder="Search...">
+              </td>
+              <td>
+                  <label style=" display: inline-block;">Sort By:&nbsp;&nbsp;</label>
+                  <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByFirstName()">First Name</button>
+                  <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByLastName()">Last Name</button>
+                  <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortById()">Id</button>        
+                        
+                </td>
+            </tr>
+          </table>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <hr class="style11">
+
+
+     <div  *ngIf="users && users.length >= 1" class="container">
+        <table class="table table-fixed">
+          <thead>
+          <tr>
+            <td class="col-xs-6">Emp ID</td>
+            <td class="col-xs-6">First Name</td>
+            <td class="col-xs-6">Last Name</td>
+            <td class="col-xs-6">&nbsp;</td>
+            <td class="col-xs-6">&nbsp;</td>
+          </tr>
+          </thead>
+          <tbody>
+          
+              <tr *ngFor="let usr of filteredUser | userFilter : filterStr">
+            <td class="col-xs-6" (click)="edit(usr)"> {{usr.empId}}</td>
+            <td class="col-xs-6" (click)="edit(usr)"> {{usr.firstName}}</td>        
+            <td class="col-xs-6" (click)="edit(usr)"> {{usr.firstName}}</td>
+            <td class="col-xs-6">
+                  <a (click)="edit(usr)" class="btn btn-primary" role="button" routerLinkActive="active">Edit</a>
+                  &nbsp;
+            </td>
+            <td class="col-xs-6">
+              <a (click)="delete(usr)" class="btn btn-danger" role="button" routerLinkActive="active">Delete</a>
+              &nbsp;
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+
+
+</div>

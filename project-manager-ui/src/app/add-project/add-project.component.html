@@ -1,0 +1,155 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header"> Add Project</div>
+        <div class="card-body">
+          <form (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm">
+            <!-- Project Title-->
+            <div class="row col-sm-6 col-md-6 ">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Project</span>
+                </div>
+                <input #title="ngModel" [(ngModel)]="project.title" class="form-control" name="title" type="text"
+                 [ngClass]="{ 'is-invalid': f.submitted && title.invalid }"
+                 required/>
+              </div>
+            </div>
+            <br>
+            <!-- Start & end date-->
+            <div class="row col-sm-6 col-md-6">
+              <div class="input-group">
+                <div class="input-group-text">
+                  <input type="checkbox" id="isDateChkLabel"
+                         (ng-model)="isDateChecked" id="dateChecked"
+                         [checked]="isDateChecked"
+                         (change)="changeChkBox($event)">
+                  <label for="inputStartDate" class="col-form-label">Start Date:&nbsp;</label>
+                  <input #startDate="ngModel" id="inputStartDate" [(ngModel)]="project.startDate"
+                         style="width:175px"
+                         [disabled]=!isDateChecked class="form-control" name="stDate" type="date" />&nbsp;&nbsp;
+                  <label for="inputEndDate" class="col-form-label">End Date:&nbsp;</label>
+                  <input #endDate="ngModel" id="inputEndDate" [(ngModel)]="project.endDate"
+                         style="width:175px"
+                         [disabled]=!isDateChecked class="form-control" name="etDate" type="date" />
+                </div>
+              </div>
+            </div>
+            <br>
+            <!--Priority  -->
+            <div class="row col-sm-6 col-md-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Priority</span>
+                </div>
+                <input #priority="ngModel" [(ngModel)]="project.priority" class="form-control" name="priority" type="range"
+                       [ngClass]="{ 'is-invalid': f.submitted && priority.invalid }"
+                       required/>
+              </div>
+            </div>
+            <br>
+            <!--Manager -->
+            <div class="row col-sm-6 col-md-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Manager</span>
+                </div>
+                <select class="form-control" id="empId" name="empId" [(ngModel)]="empId"
+                        (ngModelChange)="saveUser()">
+                  <option *ngFor="let user of users"
+                          value="{{user.empId}}">{{user.firstName}}-{{user.lastName}}</option>
+                </select>
+              </div>
+            </div>
+            <br>
+        <button class="btn btn-primary" type="submit" role="button" >{{btnTitle}}</button>&nbsp;&nbsp;
+        <a class="btn btn-primary" (click)="reset()" role="button">Reset</a>
+      </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="style11">
+  <div class="card">
+   
+    <div class="card-body">
+    <!-- Filter Section-->
+    <div>
+      <div class="row">
+        <div>
+          <input type="text" size="40" [(ngModel)]="filterStr" name="filterStr" class="form-control" id="filterStr" placeholder="Search...">
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-filter"><label>Sort By:&nbsp;&nbsp;</label></div>
+        <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByStartDate()">Start Date</button>
+        <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByEndDate()">End Date</button>
+        <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByPriority()">Priority</button>
+        <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByCompleted()">Completed</button>       
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Projects</div>
+    <div class="card-body">
+      <table class="table table-hover align-san">
+        <tbody class="tbody">
+         <tr *ngFor="let p of filteredPrj | projectFilter : filterStr">
+          <td>
+            <table class="inner-table">
+              <tr>
+                <td style="width: 60%;background-color:lightgrey">
+                  <table>
+                      <tr>
+                          <td colspan="4"><b>Project:</b> {{p.title}}</td>
+                        </tr>
+                        <tr>
+                          <td colspan="2"><b>No of Tasks:</b> {{p.noOfTasks}}</td>
+                          <td colspan="2"><b>Completed:</b> {{p.completed}}</td>
+                        </tr>
+                        <tr>
+                          <td><b>Start Date:</b> {{p.startDate}}</td>
+                          <td><b>End Date:</b> {{p.endDate}}</td>
+                         
+                        </tr>
+
+                  </table>
+
+                </td>
+                <td style="width: 20%"><b>Priority:</b> {{p.priority}}</td>
+                <td style="width: 20%">
+
+                  <table>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-primary mr-3" [disabled]=isProjectExpired(p) (click)="update(p)">Update
+                            </button>
+                          </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-primary" [disabled]=isProjectExpired(p) (click)="endProject(p)">Suspend</button>
+                          </td>
+
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+
+            </table>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+</div>
